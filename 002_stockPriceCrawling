@@ -1,0 +1,32 @@
+import requests
+from bs4 import BeautifulSoup
+import csv
+
+file = open("stock.csv", mode='w', encoding='utf-8', newline='')
+writer = csv.writer(file)
+
+headers = {
+    'User-Agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'
+    }
+# res = requests.get( 'https://finance.naver.com/item/sise_day.naver?code=005930&page=2', headers=headers)
+# soup = BeautifulSoup(res.text, 'html.parser')
+# print(res.status_code)
+# print(res.text)
+# print(soup.select('table.type2 > tr')) 
+
+for page in range(2, 5):   # 8월 데이터가 있는 2, 3, 4페이지
+
+    params = {
+        'code':'005930',   # 비동기페이지URL 물음표 뒤 쿼리 키워드 딕셔너리형태로 넣어줘서 해당페이지 가져오게
+        'page': page
+    }
+    res = requests.get( 'https://finance.naver.com/item/sise_day.naver', params=params ,headers=headers)
+    soup = BeautifulSoup(res.text, 'html.parser')
+
+    for tr in soup.select ('table.type2 tr'):
+        if len(tr.select('td')) >= 7:
+            writer.writerow([tr.select('td')[0].text.replace('.', '-'), tr.select('td')[1].text.replace(',', '')])
+file.close()
+
+# df = 
