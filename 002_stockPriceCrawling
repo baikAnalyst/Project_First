@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
-file = open("stock.csv", mode='w', encoding='utf-8', newline='')
+file = open("stock.csv", mode='w', encoding='utf-8', newline='')  # 데이터를 row 단위로 입력시 줄 바꿈을 두 번에서 한 번으로 줄이고 싶다면  newline = '' 을 사용
 writer = csv.writer(file)
 
 headers = {
@@ -29,4 +29,3 @@ for page in range(2, 5):   # 8월 데이터가 있는 2, 3, 4페이지
             writer.writerow([tr.select('td')[0].text.replace('.', '-'), tr.select('td')[1].text.replace(',', '')])
 file.close()
 
-# df = 
